@@ -1,0 +1,69 @@
+networks:
+    todo-network:
+        driver: bridge
+
+services:
+    web:
+        container_name: todo_nginx
+        build:
+            context: ./
+            dockerfile: web.dockerfile
+        volumes:
+            - ./:/var/www
+        ports:
+            - '1292:80'
+        networks:
+            - todo-network
+        links:
+            - app
+
+    app:
+        container_name: todo_app
+        build:
+            args:
+                user: sammy
+                uid: 1000
+            context: ./
+            dockerfile: app.dockerfile
+        restart: unless-stopped
+        ports:
+            - '1221:1221'
+            - '${VITE_PORT:-5211}:${VITE_PORT:-5211}'
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        env_file: '.env'
+        networks:
+            - todo-network
+        links:
+            - db
+
+    db:
+        image: mariadb:10.4
+        container_name: todo_db
+        platform: linux/amd64 #for platform error on Apple M1 chips
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes:
+            - ./database:/docker-entrypoint-initdb.d
+        ports:
+            - '2223:3306'
+        networks:
+            - todo-network
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:5.2.1
+        container_name: todo_phpmyadmin
+        restart: always
+        environment:
+            PMA_HOST: db
+            PMA_USER: ${DB_USERNAME}
+            PMA_PASSWORD: ${DB_PASSWORD}
+            UPLOAD_LIMIT: 300M
+        ports:
+            - '1324:80'
+        networks:
+            - todo-network
