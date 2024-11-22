@@ -2,7 +2,6 @@
 
 namespace App\Http\Classes;
 
-
 use DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
