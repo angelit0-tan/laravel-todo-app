@@ -1,7 +1,12 @@
 import './bootstrap';
+import { createApp, defineAsyncComponent } from 'vue';
+import { createPinia } from 'pinia'
 
-import { createApp } from 'vue'
+const app = createApp({});
+const pinia = createPinia();
 
-import app from './components/app.vue'
+app.component('LoginPage',
+    defineAsyncComponent(() => import('./components/Login.vue'))
+);
 
-createApp(app).mount('#app');
+app.use(pinia).mount('#app');
