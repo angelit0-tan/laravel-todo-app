@@ -1,7 +1,7 @@
 #
 # ------- Build Environment -------
 #
-FROM php:8.2.0-fpm AS environment
+FROM php:8.3-fpm AS environment
 
 # Arguments defined in docker-compose.yml
 ARG user
