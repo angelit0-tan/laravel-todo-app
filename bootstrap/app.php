@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Laravel\Passport\Http\Middleware\CreateFreshApiToken;
+use App\Http\Middleware\CheckArchived;
+use App\Http\Middleware\MarkedOwnerValidation;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             CreateFreshApiToken::class,
+            CheckArchived::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

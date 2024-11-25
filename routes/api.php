@@ -8,6 +8,7 @@ use App\Http\Controllers\MarkTaskController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\UploadController;
+use App\Http\Middleware\MarkedOwnerValidation;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -23,7 +24,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('tags', [TagController::class, 'store']);
 
     // Validate user, if owner of the tasks
-    Route::group(['middleware' => ['marked-ownership-validation']], function () {
+    Route::group(['middleware' => [MarkedOwnerValidation::class]], function () {
         Route::patch('tasks/{task}/complete', [MarkTaskController::class, 'markedAsComplete']);
         Route::patch('tasks/{task}/incomplete', [MarkTaskController::class, 'markedAsIncomplete']);
         Route::patch('tasks/{task}/archive', [MarkTaskController::class, 'markedAsArchived']);

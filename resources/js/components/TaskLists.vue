@@ -1,20 +1,18 @@
 <template>
-    <div class="container">
-        <div class="mb-3">
-             <h1>
-                <template v-if="Number(dataType) == taskDataTypes.All">
-                    My Tasks 
-                </template>
-                 <template v-if="Number(dataType) == taskDataTypes.Completed">
-                    Completed Tasks 
-                </template>
-                <template v-if="Number(dataType) == taskDataTypes.Todo">
-                    Todo Tasks 
-                </template>
-                <template v-if="Number(dataType) == taskDataTypes.Archived">
-                    Archived Tasks 
-                </template>
-            </h1>
+    <div>
+        <div class="mb-3 text-2xl">
+            <template v-if="Number(dataType) == taskDataTypes.All">
+                My Tasks 
+            </template>
+                <template v-if="Number(dataType) == taskDataTypes.Completed">
+                Completed Tasks 
+            </template>
+            <template v-if="Number(dataType) == taskDataTypes.Todo">
+                Todo Tasks 
+            </template>
+            <template v-if="Number(dataType) == taskDataTypes.Archived">
+                Archived Tasks 
+            </template>
         </div>
         <div class="mb-3">
             <p v-if="Number(dataType) == taskDataTypes.All"> This contains all the tasks either complete / incomplete / archived tasks.</p>
@@ -22,43 +20,41 @@
             <p v-if="Number(dataType) == taskDataTypes.Completed"> This contains tasks for completed only.</p>
             <p v-if="Number(dataType) == taskDataTypes.Todo"> This contains tasks for incompleted / todo only.</p>
         </div>
-        <div class="mb-3">
-            <div class="d-md-flex">
-                <div class="flex-md-grow-1">
-                    <button type="button" class="btn btn-primary" @click="createTask" :disabled="Number(dataType) !== taskDataTypes.All"> Create Task <i class="bi bi-plus-circle"/></button>
+        <div class="mb-3 text-white">
+            <div class="flex">
+                <div class="grow">
+                    <button type="button" class="bg-blue-500 px-4 py-2 rounded" @click="createTask" :disabled="Number(dataType) !== taskDataTypes.All"> Create Task</button>
                 </div>
-                <div class="d-md-flex">
-                    <button type="button" class="btn btn-primary me-2" @click="showFilter"><i class="bi bi-funnel"/>Filter</button>
-                    <button type="button" class="btn btn-primary" @click="showSortBy"><i class="bi bi-filter"/>Sort By</button>
+                <div class="flex gap-2">
+                    <button type="button" class="bg-blue-500 px-4 py-2 rounded" @click="showFilter">Filter</button>
+                    <button type="button" class="bg-blue-500 px-4 py-2 rounded" @click="showSortBy">Sort By</button>
                 </div>
             </div>
         </div>
-        <div class="row" v-if="taskStore.taskLists">
-            <div class="col-md-4 mb-3"  v-for="task in taskStore.taskLists.data" :key="task.id">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <h5 class="card-title flex-grow-1 pe-2" @click="showTask(task.id)"><a href="#">{{ task.title }}</a></h5>
-                            <button class="btn p-0" @click="showTask(task.id)"> <i class="bi bi-pencil-square me-2" /></button>
-                            <button class="btn p-0" @click="deleteTask(task.id)"> <i class="bi bi-x-circle" /></button>
+        <div v-if="taskStore.taskLists" class="grid grid-cols-3 gap-3 mb-5">
+            <div v-for="task in taskStore.taskLists.data" :key="task.id">
+                <div class="bg-gray-100 rounded p-4">
+                    <div class="flex gap-1">
+                        <h5 class="grow" @click="showTask(task.id)"><a href="#">{{ task.title }}</a></h5>
+                        <button @click="showTask(task.id)"> Edit </button>
+                        <button @click="deleteTask(task.id)"> Delete</button>
+                    </div>
+                    <div @click="showTask(task.id)">
+                        <p class="task-description"> {{ task.description }}</p>
+                        <div class="mb-2">
+                            <span class="block"><small class="text-muted">Status: {{ task.task_status ? task.completed_at ? 'Completed' : 'Incomplete/Todo' : 'No status assigned' }}</small></span>
+                            <span class="block"><small class="text-muted">Priority: {{ taskIdentity(task.task_priority).status }}</small></span>
+                            <span class="block"><small class="text-muted">Completed Date: {{ task.completed_at }}</small></span>
+                            <span class="block"><small class="text-muted">Due Date: {{ task.due_date }}</small></span>
+                            <span class="block"><small class="text-muted">Created Date: {{ task.created_at }}</small></span>
                         </div>
-                        <div @click="showTask(task.id)">
-                            <p class="card-text task-description"> {{ task.description }}</p>
-                            <div class="mb-2">
-                                <span class="card-text d-block"><small class="text-muted">Status: {{ task.task_status ? task.completed_at ? 'Completed' : 'Incomplete/Todo' : 'No status assigned' }}</small></span>
-                                <span class="card-text d-block"><small class="text-muted">Priority: {{ taskIdentity(task.task_priority).status }}</small></span>
-                                <span class="card-text d-block"><small class="text-muted">Completed Date: {{ task.completed_at }}</small></span>
-                                <span class="card-text d-block"><small class="text-muted">Due Date: {{ task.due_date }}</small></span>
-                                <span class="card-text d-block"><small class="text-muted">Created Date: {{ task.created_at }}</small></span>
-                            </div>
-                        </div>
-                        <div class="mb-2 d-md-flex">
-                            <button class="btn btn-primary btn-sm me-1" :class="{'disabled' : task.task_status === 1 }" v-if="Number(dataType) !== taskDataTypes.Completed" @click="markAsComplete(task.id)">Mark as Complete</button>
-                            <button class="btn btn-primary btn-sm me-1" :class="{'disabled' : task.task_status === 2 }" v-if="Number(dataType) !== taskDataTypes.Todo" @click="markAsInComplete(task.id)">Mark as Incomplete/Todo</button>
-                            <button class="btn btn-primary btn-sm" @click="assignArchivedStatus(task)">
-                                {{ task.archived_at ? 'Restore' : 'Archived'}}
-                            </button>
-                        </div>
+                    </div>
+                    <div class="mb-2 flex gap-1 text-white text-sm">
+                        <button class="bg-blue-500 px-2 py-1 rounded" :class="{'disabled' : task.task_status === 1 }" v-if="Number(dataType) !== taskDataTypes.Completed" @click="markAsComplete(task.id)">Mark as Complete</button>
+                        <button class="bg-blue-500 px-2 py-1 rounded" :class="{'disabled' : task.task_status === 2 }" v-if="Number(dataType) !== taskDataTypes.Todo" @click="markAsInComplete(task.id)">Mark as Incomplete/Todo</button>
+                        <button class="bg-blue-500 px-2 py-1 rounded" @click="assignArchivedStatus(task)">
+                            {{ task.archived_at ? 'Restore' : 'Archived'}}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -99,17 +95,17 @@ export default {
         provide('currentPage', computed(() =>  currentPage.value ));
         // open modal
         const createTask = () => {
-            taskModalRef.value.openModal()
+            taskModalRef.value.show()
         }
 
         // Show filter
         const showFilter = () => {
-           filterModalRef.value.openModal();
+           filterModalRef.value.show();
         }
 
         // Show sort
         const showSortBy = () => {
-            sortModalRef.value.openModal();
+            sortModalRef.value.show();
         }
 
         const showTask = (id) => {
@@ -227,7 +223,7 @@ export default {
         }
 
         onMounted(() => {
-            // taskStore.getTasks({page: currentPage.value, data_type: props.dataType});
+            taskStore.getTasks({page: currentPage.value, data_type: props.dataType});
         });
 
         return { 
@@ -237,8 +233,7 @@ export default {
     },
 }
 </script>
-<style lang="scss" scoped>
-    @import '~bootstrap/scss/bootstrap-utilities';
+<style scoped>
     .card {
         background: #f4f4f4;
         border-color: #ececec;

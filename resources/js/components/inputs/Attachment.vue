@@ -34,7 +34,7 @@
 <script>
 import { ref } from 'vue';
 import http from '@js/http.js';
-import { fileTypes, isValidFile } from '@js/Components/Composables/FileType.js';
+import { fileTypes, isValidFile } from '@js/components/composables/FileType.js';
 export default {
     props: {
         attachment: {

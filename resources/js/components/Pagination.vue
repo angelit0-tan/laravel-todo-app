@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav>
-            <ul class="pagination">
+            <ul class="pagination flex gap-2">
                 <li class="page-item" :class="{ 'disabled' : !taskStore.taskLists.links.prev }">
                     <button class="page-link" @click="goToPrevNext(taskStore.taskLists.links.prev)"> Previous</button>
                 </li>
@@ -17,7 +17,7 @@
 </template>
 <script>
 import { ref } from 'vue';
-import { useTaskStore } from '../Stores/TaskStore';
+import { useTaskStore } from '../stores/TaskStore';
 export default {
     props:{
         dataType: {

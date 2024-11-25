@@ -18,7 +18,6 @@ export const useTaskStore = defineStore('task', {
     actions: {
         // Get all tasks
         async getTasks(params = {page: 1}) {
-            alert('task')
             const { data } = await http.get(`api/tasks`, {params});
             this.tasks = data;
         },
@@ -36,7 +35,7 @@ export const useTaskStore = defineStore('task', {
 
         // Add tag
         async addTag(params) {
-            const { data } = await http.post('api/tags', params);
+            const data  = await http.post('api/tags', params);
             return data;
         },
 
