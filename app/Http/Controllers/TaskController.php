@@ -24,7 +24,7 @@ class TaskController extends Controller
      * 
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $perPage = $request->items_per_page ?? 12; // Default is 12
         $sortBy = $request->sort_by ?? null;

@@ -1,13 +1,10 @@
 <template>
     <header class="header">
       <nav class="navbar navbar-expand-md bg-white">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">TODO App</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse d-md-flex justify-content-md-end" id="navbarCollapse">
-            <ul class="navbar-nav mb-2 mb-md-0">
+        <div class="flex justify-between">
+          <a class="text-2xl font-bold" href="/">TODO App</a>
+          <div>
+            <ul class="flex gap-5">
               <li class="nav-item">
                 <a class="nav-link" :class="{'active' : page === 'home'}" aria-current="page" href="/home">My Tasks</a>
               </li>

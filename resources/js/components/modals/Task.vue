@@ -62,8 +62,8 @@
             </div>
         </div>
         <div class="flex gap-2">
-            <button type="button" class="btn bg-green-500 px-4 py-2 rounded" :disabled="isBusy" @click="saveTask">Save</button>
-            <button type="button" class="btn bg-red-500 px-4 py-2 rounded" @click="hide">Close</button>
+            <button type="button" class="bg-green-500 px-4 py-2 rounded" :disabled="isBusy" @click="saveTask">Save</button>
+            <button type="button" class="bg-red-500 px-4 py-2 rounded" @click="hide">Close</button>
         </div>
       </div>
     </div>
